@@ -18,7 +18,7 @@
     svg: 'image/svg+xml'
   };
 
-  const isElement = obj => obj instanceof HTMLElement || obj instanceof SVGElement;
+  const isElement = obj => obj instanceof HTMLElement || obj instanceof SVGElement || (`${obj}`.toString().indexOf('SVGElement') > -1);
   const requireDomNode = el => {
     if (!isElement(el)) throw new Error(`an HTMLElement or SVGElement is required; got ${el}`);
   };
@@ -309,13 +309,15 @@
       canvg
     } = options || {};
 
+    const multiple = (options.sizeMultiply || 1);
+
     const convertToPng = ({src, width, height}) => {
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
-      const pixelRatio = window.devicePixelRatio || 1;
-
-      canvas.width = width * pixelRatio;
-      canvas.height = height * pixelRatio;
+      const pixelRatio = (window.devicePixelRatio || 1) * multiple;
+      
+      canvas.width = (width * pixelRatio);
+      canvas.height = (height * pixelRatio);
       canvas.style.width = `${canvas.width}px`;
       canvas.style.height = `${canvas.height}px`;
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
